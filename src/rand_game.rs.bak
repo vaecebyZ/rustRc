@@ -1,0 +1,39 @@
+use rand::Rng;
+use std::cmp::Ordering;
+use std::io;
+
+fn main() {
+    // 生成随机数
+    let rand_number = rand::thread_rng().gen_range(1..101);
+
+    loop {
+        let mut guess = String::new();
+        // 获取输入的数字
+        println!("请输入猜测的数据");
+
+        match io::stdin().read_line(&mut guess) {
+            Ok(_) => {}
+            Err(_) => {
+                println!("数据接收失败");
+                continue;
+            }
+        }
+
+        let guess: i32 = match guess.trim().parse() {
+            Ok(num) => num,
+            Err(_) => {
+                println!("请输入数字");
+                continue;
+            }
+        };
+
+        match guess.cmp(&rand_number) {
+            Ordering::Less => println!("太小了"),
+            Ordering::Equal => {
+                println!("猜中了");
+                break;
+            }
+            Ordering::Greater => println!("太大了"),
+        }
+    }
+}
